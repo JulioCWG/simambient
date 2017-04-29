@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.rawgit.com/konvajs/konva/1.5.0/konva.min.js"></script>
+  <script src="./jscolor/jscolor.js"></script>
+  <meta charset="utf-8">
+  <title>Konva Rect Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color:white;
+        }
+        #container{
+          display: flex;
+          align-self: center;
+          width:1000px;
+          height:1000px;
+          margin:auto;
+          background-color: lightgray;
+        }
+        #buttons {
+        position: absolute;
+        top: 5px;
+        left: 10px;
+      }
+    #buttons > input {
+      padding: 10px;
+      display: block;
+      margin-top: 5px;
+    }
+    </style>
+</head>
+<body>
+  <div id="container"></div>
+  <div style="position:absolute; left:280px; top:10px; display:none">
+    toRGBString = <span id="rgb-str"></span><br />
+</div>
+<div style="position:absolute; left:280px; top:35px; display:none">
+  toRGBString = <span id="rgb-str1"></span><br />
+</div>
+<div style="position:absolute; left:280px; top:60px; display:none">
+  toRGBString = <span id="rgb-str2"></span><br />
+</div>
+<div style="position:absolute; left:280px; top:85px; display:none">
+  toRGBString = <span id="rgb-str3"></span><br />
+</div>
+  <div id="buttons">
+    <!-- <input type="button" id="ocultar" value="Oculta Rectangulo">
+    <input type="button" id="mostrar" value="Muestra Rectangulo"> -->
+    <h3>Selecciona los colores de la habitación</h3>
+    <p>Pared Izquierda</p>
+    <input class="jscolor {onFineChange:'ParedI(this); dibujarMuebles();'}" value="ffffff">
+    <p>Pared Derecha</p>
+    <input class="jscolor {onFineChange:'ParedD(this); dibujarMuebles();'}" value="ffffff">
+    <p>Pared Fondo</p>
+    <input class="jscolor {onFineChange:'ParedFon(this); dibujarMuebles();'}" value="ffffff">
+    <p>Techo</p>
+    <input class="jscolor {onFineChange:'Techo(this); dibujarMuebles();'}" value="ffffff">
+
+  </div>
+  <script>
+
+  //cargar imagenes escena inicial
+
+    function loadImages(sources, callback) {
+      var images = {};
+      var loadedImages = 0;
+      var numImages = 0;
+      for(var src in sources) {
+        numImages++;
+      }
+      for(var src in sources) {
+        images[src] = new Image();
+        images[src].onload = function() {
+          if(++loadedImages >= numImages) {
+            callback(images);
+          }
+        };
+        images[src].src = sources[src];
+      }
+    }
+
+  // canvass
+  var width = window.innerWidth;
+  var height = window.innerHeight;
+    var stage = new Konva.Stage({
+      container: 'container',
+      width: width,
+      height: height
+    });
+
+    var layer = new Konva.Layer();
+    // var escena = new konva.Layer();
+    // var piso = new konva.Layer();
+
+
+    function elemEscena(images)  {
+      var paredi = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.paredi,
+          width:875,
+          height:302
+        });
+      var paredD = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.paredD,
+          width:875,
+          height:302
+        });
+      var techo = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.techo,
+          width:875,
+          height:302
+        });
+      var paredF = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.paredF,
+          width:875,
+          height:302
+        });
+      var ventana = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.ventana,
+          width:875,
+          height:302
+        });
+      var ventanaD = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.ventanaD,
+          width:875,
+          height:302
+        });
+
+      var puerta = new Konva.Image({
+          x:50,
+          y:0,
+          image:images.puerta,
+          width:875,
+          height:302
+        });
+        var piso = new Konva.Image({
+            x:50,
+            y:0,
+            image:images.piso,
+            width:875,
+            height:302
+          });
+          var muebles = new Konva.Image({
+              x:50,
+              y:0,
+              image:images.muebles,
+              width:875,
+              height:302
+            });
+
+
+        paredi.cache();
+        paredi.drawHitFromCache();
+        paredi.filters([Konva.Filters.RGBA]);
+        paredi.blue(255);
+        paredi.green(255);
+        paredi.red(255);
+        paredi.alpha(0.5);
+        paredD.cache();
+        paredD.drawHitFromCache();
+        paredD.filters([Konva.Filters.RGBA]);
+        paredD.blue(255);
+        paredD.green(255);
+        paredD.red(255);
+        paredD.alpha(0.5);
+        techo.cache();
+        techo.drawHitFromCache();
+        techo.filters([Konva.Filters.RGBA]);
+        techo.blue(255);
+        techo.green(255);
+        techo.red(255);
+        techo.alpha(0.5);
+        paredF.cache();
+        paredF.filters([Konva.Filters.RGBA]);
+        paredF.red(255);
+        paredF.green(255);
+        paredF.blue(255);
+        paredF.alpha(0.5);
+        layer.add(paredi);
+        layer.add(paredD);
+        layer.add(techo);
+        layer.add(paredF);
+        layer.add(ventana);
+        layer.add(ventanaD);
+        layer.add(puerta);
+        layer.add(piso);
+        layer.add(muebles);
+        stage.add(layer);
+    }
+
+
+    var sources = {
+     paredi: './src/assets/sala-espera/pared-izq.png',
+     paredD: './src/assets/sala-espera/pared-der.png',
+     techo: './src/assets/sala-espera/techo.png',
+     paredF:'./src/assets/sala-espera/pared-fondo.png',
+     ventana:'./src/assets/sala-espera/ventana.png',
+     ventanaD:'./src/assets/sala-espera/ventana-der.png',
+     puerta:'./src/assets/sala-espera/puerta.png',
+     piso:'./src/assets/sala-espera/piso.png',
+     muebles:'./src/assets/sala-espera/muebles.png'
+   };
+
+
+loadImages(sources, elemEscena);
+
+// funcion muebles
+function dibujarMuebles(){
+  var mueble = new Image();
+  mueble.onload = function(){
+  var muebles = new Konva.Image({
+      x:50,
+      y:0,
+      image:mueble,
+      width:875,
+      height:302
+    });
+    muebles.cache();
+    muebles.drawHitFromCache();
+    layer.add(muebles);
+    stage.add(layer);
+  }
+    mueble.src = './src/assets/sala-espera/muebles.png'
+}
+
+    //funcion picker
+    function ParedI(pIzquierda) {
+      document.getElementById('rgb-str').innerHTML = pIzquierda.toRGBString();
+      var rgb = pIzquierda.toRGBString();
+          var red = Math.round(pIzquierda.rgb[0]);
+          var green = Math.round(pIzquierda.rgb[1]);
+          var blue = Math.round(pIzquierda.rgb[2]);
+
+          var paredizq = new Image();
+          paredizq.onload = function () {
+        var paredi = new Konva.Image({
+              x:50,
+              y:0,
+              image:paredizq,
+              width:875,
+              height:302
+            });
+            paredi.cache();
+            paredi.drawHitFromCache();
+            paredi.filters([Konva.Filters.RGBA]);
+            paredi.blue(blue);
+            paredi.green(green);
+            paredi.red(red);
+            paredi.alpha(0.5);
+            layer.add(paredi);
+            stage.add(layer);
+          }
+
+          paredizq.src = './src/assets/sala-espera/pared-izq.png'
+        //  dibujarMuebles();
+    }
+
+    function ParedD(pDerecha) {
+      document.getElementById('rgb-str1').innerHTML = pDerecha.toRGBString();
+      var rgb1 = pDerecha.toRGBString();
+          var red = Math.round(pDerecha.rgb[0]);
+          var green = Math.round(pDerecha.rgb[1]);
+          var blue = Math.round(pDerecha.rgb[2]);
+
+          var pareddere = new Image();
+          pareddere.onload = function () {
+        var paredD = new Konva.Image({
+              x:50,
+              y:0,
+              image:pareddere,
+              width:875,
+              height:302
+            });
+            paredD.cache();
+            paredD.drawHitFromCache();
+            paredD.filters([Konva.Filters.RGBA]);
+            paredD.blue(blue);
+            paredD.green(green);
+            paredD.red(red);
+            paredD.alpha(0.5);
+            layer.add(paredD);
+            stage.add(layer);
+          }
+          pareddere.src = './src/assets/sala-espera/pared-der.png'
+
+    }
+    function ParedFon(pFon) {
+      document.getElementById('rgb-str2').innerHTML = pFon.toRGBString();
+      var rgb2 = pFon.toRGBString();
+          var red = Math.round(pFon.rgb[0]);
+          var green = Math.round(pFon.rgb[1]);
+          var blue = Math.round(pFon.rgb[2]);
+
+          var paredfondo = new Image();
+          paredfondo.onload = function () {
+        var paredFnd = new Konva.Image({
+              x:50,
+              y:0,
+              image:paredfondo,
+              width:875,
+              height:302
+            });
+            paredFnd.cache();
+            paredFnd.drawHitFromCache();
+            paredFnd.filters([Konva.Filters.RGBA]);
+            paredFnd.blue(blue);
+            paredFnd.green(green);
+            paredFnd.red(red);
+            paredFnd.alpha(0.5);
+            layer.add(paredFnd);
+            stage.add(layer);
+          }
+          paredfondo.src = './src/assets/sala-espera/pared-fondo.png'
+
+    }
+    function Techo(tech) {
+      document.getElementById('rgb-str3').innerHTML = tech.toRGBString();
+      var rgb3 = tech.toRGBString();
+          var red = Math.round(tech.rgb[0]);
+          var green = Math.round(tech.rgb[1]);
+          var blue = Math.round(tech.rgb[2]);
+
+          var superior = new Image();
+          superior.onload = function () {
+        var paredS = new Konva.Image({
+              x:50,
+              y:0,
+              image:superior,
+              width:875,
+              height:302
+            });
+            paredS.cache();
+            paredS.drawHitFromCache();
+            paredS.filters([Konva.Filters.RGBA]);
+            paredS.blue(blue);
+            paredS.green(green);
+            paredS.red(red);
+            paredS.alpha(0.5);
+            layer.add(paredS);
+            stage.add(layer);
+          }
+          superior.src = './src/assets/sala-espera/techo.png'
+    }
+
+  </script>
+
+</body>
+</html>

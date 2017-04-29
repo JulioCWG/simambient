@@ -1,0 +1,17 @@
+{
+  "name": "konvavue",
+  "version": "0.1.0",
+  "description": "prueba de kanvas para simulaodr de ambientes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "simulador",
+  ],
+  "author": "Julio César Castro Alcalá",
+  "license": "ISC",
+  "dependencies": {
+    "konva": "^1.5.0"
+  }
+}
